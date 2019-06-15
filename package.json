@@ -1,6 +1,6 @@
 {
   "name": "keisatsu",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Task runner based on yakuza",
   "engines": {
     "node": ">= 10.13 <11"
