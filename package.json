@@ -20,6 +20,7 @@
     "tsutils": "^3.14.0",
     "typescript": "^3.5.2"
   },
+  "files": ["lib"],
   "scripts": {
     "clean": "rimraf coverage lib tmp",
     "build": "tsc -p tsconfig.release.json",
