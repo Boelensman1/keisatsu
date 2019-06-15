@@ -1,15 +1,15 @@
-import Task, { RunResult } from './Task';
+import Task, { RunResult } from './Task'
 
 interface IMTask {
-    new (): Task;
+  new (): Task
 }
 interface Tasks {
-  [taskName: string]: IMTask;
+  [taskName: string]: IMTask
 }
 
 interface TaskObj {
-  name: string;
-  seed?: any;
+  name: string
+  seed?: any
 }
 
 type taskPlanElement = TaskObj | string
@@ -17,10 +17,10 @@ type NestedtaskPlan = taskPlanElement | taskPlanElement[]
 type taskPlan = taskPlanElement[] | NestedtaskPlan[]
 
 interface taskPlans {
-  [taskPlanName: string]: taskPlan;
+  [taskPlanName: string]: taskPlan
 }
 
-function getLastResult(results:any[]) {
+function getLastResult(results: any[]) {
   if (results.length === 0) {
     return undefined
   }
@@ -28,15 +28,14 @@ function getLastResult(results:any[]) {
   if (!Array.isArray(result)) {
     return result.data
   }
-  return result.map((r: RunResult) => (r.data))
+  return result.map((r: RunResult) => r.data)
 }
 
 export default abstract class Agent {
-  private tasks : Tasks = {}
-  private taskPlans : taskPlans = {}
+  private tasks: Tasks = {}
+  private taskPlans: taskPlans = {}
 
-  constructor() {
-  }
+  constructor() {}
 
   public registerTask(task: IMTask): void {
     this.tasks[task.name] = task
@@ -52,9 +51,9 @@ export default abstract class Agent {
 
   public runTask(task: taskPlanElement, lastResult?: any): Promise<RunResult> {
     if (typeof task === 'string' || task instanceof String) {
-      return (new this.tasks[task as string]).run(undefined, lastResult)
+      return new this.tasks[task as string]().run(undefined, lastResult)
     }
-    return (new this.tasks[task.name]).run(task.seed, lastResult)
+    return new this.tasks[task.name]().run(task.seed, lastResult)
   }
 
   public async runTasks(taskPlan: taskPlan): Promise<any> {
@@ -63,7 +62,13 @@ export default abstract class Agent {
     for (let tasks of taskPlan) {
       const lastResult = getLastResult(results)
       if (Array.isArray(tasks)) {
-        results.push(await Promise.all(tasks.map((task:taskPlanElement) => (this.runTask(task, lastResult)))))
+        results.push(
+          await Promise.all(
+            tasks.map((task: taskPlanElement) =>
+              this.runTask(task, lastResult),
+            ),
+          ),
+        )
       } else {
         const result = await this.runTask(tasks, lastResult)
         results.push(result)

@@ -1,10 +1,10 @@
-import Task from '../src/Task';
+import Task from '../src/Task'
 
 describe('The task class', () => {
   it('runs the succeed function on completion', async () => {
     class TestTask extends Task {
       public action() {
-        this.succeed('test')
+        return 'test'
       }
     }
 
@@ -17,7 +17,7 @@ describe('The task class', () => {
   it('runs the fail function when failing', async () => {
     class TestTask extends Task {
       public action() {
-        this.fail(new Error('test'))
+        throw new Error('test')
       }
     }
 
