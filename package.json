@@ -1,7 +1,7 @@
 {
   "name": "keisatsu",
-  "version": "0.0.0",
-  "description": "Minimalistic boilerplate to quick-start Node.js development in TypeScript.",
+  "version": "0.0.2",
+  "description": "Task runner based on yakuza",
   "engines": {
     "node": ">= 10.13 <11"
   },
@@ -25,10 +25,12 @@
     "build:watch": "tsc -w -p tsconfig.release.json",
     "lint": "tslint -t stylish --project \"tsconfig.json\"",
     "test": "jest --coverage",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test && npm run lint"
   },
-  "author": "Jakub Synowiec <github@jakubsynowiec.info>",
-  "license": "Apache-2.0",
+  "author": "Wigger Boelens",
+  "license": "MIT",
   "dependencies": {
     "tslib": "^1.10.0"
   }
