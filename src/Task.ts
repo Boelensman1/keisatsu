@@ -33,6 +33,3 @@ export default abstract class Task {
     }
   }
 }
-/*success(data): marks the task as successful and emits a success event with the data passed to it
-fail(error, errorMessage): marks the task as failed, stops the current job and emits a fail event with the error object and error message passed
-share(key, value, [options]): shares a value to tasks in the next execution block*/
