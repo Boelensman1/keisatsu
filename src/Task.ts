@@ -7,7 +7,7 @@ export interface RunResult {
 export default abstract class Task {
   constructor() {}
 
-  abstract action(data?: any, seed?: any): void
+  abstract action(data?: any, seed?: any, hq?: any): void
 
   public succeed(data: any): RunResult {
     return {
@@ -24,9 +24,9 @@ export default abstract class Task {
     }
   }
 
-  public async run(seed?: any, lastResult?: any): Promise<RunResult> {
+  public async run(seed?: any, lastResult?: any, hq?: any): Promise<RunResult> {
     try {
-      const result = await this.action(seed, lastResult)
+      const result = await this.action(seed, lastResult, hq)
       return this.succeed(result)
     } catch (e) {
       return this.fail(e)

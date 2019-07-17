@@ -2,6 +2,7 @@ import Task, { RunResult } from './Task'
 
 interface IMTask {
   new (): Task
+  setHq?(hq: any): void
 }
 interface Tasks {
   [taskName: string]: IMTask
@@ -32,10 +33,15 @@ function getLastResult(results: any[]) {
 }
 
 export default abstract class Agent {
+  private hq: any
   private tasks: Tasks = {}
   private taskPlans: taskPlans = {}
 
   constructor() {}
+
+  public setHq(hq: any): void {
+    this.hq = hq
+  }
 
   public registerTask(task: IMTask): void {
     this.tasks[task.name] = task
@@ -51,7 +57,11 @@ export default abstract class Agent {
 
   public runTask(task: taskPlanElement, lastResult?: any): Promise<RunResult> {
     if (typeof task === 'string' || task instanceof String) {
-      return new this.tasks[task as string]().run(undefined, lastResult)
+      return new this.tasks[task as string]().run(
+        undefined,
+        lastResult,
+        this.hq,
+      )
     }
     return new this.tasks[task.name]().run(task.seed, lastResult)
   }

@@ -2,7 +2,7 @@ import Agent from '../src/Agent'
 import Task from '../src/Task'
 
 describe('The agent class', () => {
-  it('has a name', () => {
+  it('Can be created', () => {
     class TestAgent extends Agent {}
     const agent = new TestAgent()
     expect(agent).toBeTruthy()

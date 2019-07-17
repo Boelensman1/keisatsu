@@ -1,25 +1,19 @@
-export default class Keisatsu {
-  constructor() {}
+import Agent from './Agent'
+
+interface Agents {
+  [agentName: string]: Agent
 }
 
-/*
-class Agent {
+export default abstract class Keisatsu {
+  private agents: Agents = {}
   constructor() {}
-  () {
-    return "Hello, " + this.greeting;
+
+  public registerAgent(agent: Agent): void {
+    agent.setHq(this)
+    this.agents[agent.constructor.name] = agent
+  }
+
+  public getAgent(name: string): Agent {
+    return this.agents[name]
   }
 }
-
-class Task {
-  constructor() {}
-  () {
-    return "Hello, " + this.greeting;
-  }
-}
-
-class Bureau {
-  constructor() {}
-  () {
-    return "Hello, " + this.greeting;
-  }
-}*/
