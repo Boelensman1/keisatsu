@@ -8,8 +8,10 @@ export default abstract class Keisatsu {
   private agents: Agents = {}
   constructor() {}
 
-  public registerAgent(agent: Agent): void {
-    this.agents[agent.constructor.name] = agent
+  public registerAgent<T extends Agent>(agent: { new (...args: any[]): T }): T {
+    const newAgent = new agent(this)
+    this.agents[agent.name] = newAgent
+    return newAgent
   }
 
   public getAgent(name: string): Agent {

@@ -33,14 +33,10 @@ export default abstract class Agent {
   private tasks: Tasks = {}
   private taskPlans: taskPlans = {}
 
-  constructor(private hq: Keisatsu) {
-    this.hq = hq
-    hq.registerAgent(this)
-  }
+  constructor(private hq: Keisatsu) {}
 
   public registerTask<T extends Task>(task: { new (...args: any[]): T }): void {
-    const newTask = new task(this.hq, this)
-    this.tasks[task.name] = newTask
+    this.tasks[task.name] = new task(this.hq, this)
   }
 
   public addTaskPlan(name: string, taskPlan: taskPlan): void {

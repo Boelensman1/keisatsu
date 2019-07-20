@@ -10,7 +10,7 @@ const createTestAgent = (keisatsu: Keisatsu): Agent => {
     }
   }
 
-  const agent = new TestAgent(keisatsu)
+  const agent = keisatsu.registerAgent(TestAgent)
   agent.registerTask(TestTask)
 
   agent.addTaskPlan('main', ['TestTask'])
