@@ -9,11 +9,14 @@ export default abstract class Keisatsu {
   constructor() {}
 
   public registerAgent(agent: Agent): void {
-    agent.setHq(this)
     this.agents[agent.constructor.name] = agent
   }
 
   public getAgent(name: string): Agent {
     return this.agents[name]
+  }
+
+  public get(property: string): any {
+    return this[property]
   }
 }

@@ -1,3 +1,6 @@
+import Agent from './Agent'
+import Keisatsu from './Keisatsu'
+
 export interface RunResult {
   success: boolean
   data: any
@@ -5,9 +8,9 @@ export interface RunResult {
 }
 
 export default abstract class Task {
-  constructor() {}
+  constructor(public hq: Keisatsu, public agent: Agent) {}
 
-  abstract action(data?: any, seed?: any, hq?: any): void
+  abstract action(data?: any, seed?: any): void
 
   public succeed(data: any): RunResult {
     return {
@@ -24,9 +27,9 @@ export default abstract class Task {
     }
   }
 
-  public async run(seed?: any, lastResult?: any, hq?: any): Promise<RunResult> {
+  public async run(seed?: any, lastResult?: any): Promise<RunResult> {
     try {
-      const result = await this.action(seed, lastResult, hq)
+      const result = await this.action(seed, lastResult)
       return this.succeed(result)
     } catch (e) {
       return this.fail(e)

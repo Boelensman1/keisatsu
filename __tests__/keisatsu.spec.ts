@@ -2,7 +2,7 @@ import Keisatsu from '../src/Keisatsu'
 import Agent from '../src/Agent'
 import Task from '../src/Task'
 
-const createTestAgent = (): Agent => {
+const createTestAgent = (keisatsu: Keisatsu): Agent => {
   class TestAgent extends Agent {}
   class TestTask extends Task {
     public action() {
@@ -10,7 +10,7 @@ const createTestAgent = (): Agent => {
     }
   }
 
-  const agent = new TestAgent()
+  const agent = new TestAgent(keisatsu)
   agent.registerTask(TestTask)
 
   agent.addTaskPlan('main', ['TestTask'])
@@ -22,9 +22,8 @@ describe('The keisatsu class', () => {
     class TestKeitsatu extends Keisatsu {}
 
     const testKeitsatu = new TestKeitsatu()
-    const testAgent = createTestAgent()
+    createTestAgent(testKeitsatu)
 
-    testKeitsatu.registerAgent(testAgent)
     const result = await testKeitsatu.getAgent('TestAgent').runTaskPlan('main')
     expect(result[0].success).toBe(true)
     expect(result[0].data).toBe('test')
@@ -37,15 +36,15 @@ describe('The keisatsu class', () => {
     const testKeitsatu = new TestKeitsatu()
 
     class TestTask2 extends Task {
-      public action(_seed: number, _prevData: number, hq: TestKeitsatu) {
-        return hq.data
+      public action(_seed: number, _prevData: number) {
+        return this.hq.get('data')
       }
     }
-    const testAgent = createTestAgent()
+    const testAgent = createTestAgent(testKeitsatu)
+
     testAgent.registerTask(TestTask2)
     testAgent.addTaskPlan('test', ['TestTask2'])
 
-    testKeitsatu.registerAgent(testAgent)
     const result = await testKeitsatu.getAgent('TestAgent').runTaskPlan('test')
     expect(result[0].success).toBe(true)
     expect(result[0].data).toBe('test2')

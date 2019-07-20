@@ -1,8 +1,5 @@
 {
-  "extends": [
-    "tslint-microsoft-contrib/recommended",
-    "tslint-config-prettier"
-  ],
+  "extends": ["tslint-microsoft-contrib/recommended", "tslint-config-prettier"],
   "rules": {
     "mocha-no-side-effect-code": false,
     "missing-jsdoc": false,
@@ -12,6 +9,7 @@
     "no-void-expression": false,
     "no-redundant-jsdoc": false,
     "prefer-type-cast": false,
+    "no-backbone-get-set-outside-model": false,
     "typedef": [
       true,
       "parameter",

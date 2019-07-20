@@ -1,11 +1,8 @@
 import Task, { RunResult } from './Task'
+import Keisatsu from './Keisatsu'
 
-interface IMTask {
-  new (): Task
-  setHq?(hq: any): void
-}
 interface Tasks {
-  [taskName: string]: IMTask
+  [taskName: string]: Task
 }
 
 interface TaskObj {
@@ -33,18 +30,17 @@ function getLastResult(results: any[]) {
 }
 
 export default abstract class Agent {
-  private hq: any
   private tasks: Tasks = {}
   private taskPlans: taskPlans = {}
 
-  constructor() {}
-
-  public setHq(hq: any): void {
+  constructor(private hq: Keisatsu) {
     this.hq = hq
+    hq.registerAgent(this)
   }
 
-  public registerTask(task: IMTask): void {
-    this.tasks[task.name] = task
+  public registerTask<T extends Task>(task: { new (...args: any[]): T }): void {
+    const newTask = new task(this.hq, this)
+    this.tasks[task.name] = newTask
   }
 
   public addTaskPlan(name: string, taskPlan: taskPlan): void {
@@ -57,13 +53,9 @@ export default abstract class Agent {
 
   public runTask(task: taskPlanElement, lastResult?: any): Promise<RunResult> {
     if (typeof task === 'string' || task instanceof String) {
-      return new this.tasks[task as string]().run(
-        undefined,
-        lastResult,
-        this.hq,
-      )
+      return this.tasks[task as string].run(undefined, lastResult)
     }
-    return new this.tasks[task.name]().run(task.seed, lastResult)
+    return this.tasks[task.name].run(task.seed, lastResult)
   }
 
   public async runTasks(taskPlan: taskPlan): Promise<any> {
