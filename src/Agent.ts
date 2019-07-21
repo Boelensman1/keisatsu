@@ -1,5 +1,5 @@
 import Task, { RunResult } from './Task'
-import Keisatsu from './Keisatsu'
+import Keisatsu, { Options } from './Keisatsu'
 
 interface Tasks {
   [taskName: string]: Task
@@ -33,7 +33,15 @@ export default abstract class Agent {
   private tasks: Tasks = {}
   private taskPlans: taskPlans = {}
 
-  constructor(private hq: Keisatsu) {}
+  constructor(private hq: Keisatsu, private options: Options) {}
+
+  public get(property: string): any {
+    return this[property]
+  }
+
+  public set(property: string, value: any): void {
+    this[property] = value
+  }
 
   public registerTask<T extends Task>(task: { new (...args: any[]): T }): void {
     this.tasks[task.name] = new task(this.hq, this)
@@ -49,9 +57,9 @@ export default abstract class Agent {
 
   public runTask(task: taskPlanElement, lastResult?: any): Promise<RunResult> {
     if (typeof task === 'string' || task instanceof String) {
-      return this.tasks[task as string].run(undefined, lastResult)
+      return this.tasks[task as string].run(undefined, lastResult, this.options)
     }
-    return this.tasks[task.name].run(task.seed, lastResult)
+    return this.tasks[task.name].run(task.seed, lastResult, this.options)
   }
 
   public async runTasks(taskPlan: taskPlan): Promise<any> {

@@ -1,5 +1,5 @@
 import Agent from './Agent'
-import Keisatsu from './Keisatsu'
+import Keisatsu, { Options } from './Keisatsu'
 
 export interface RunResult {
   success: boolean
@@ -27,12 +27,21 @@ export default abstract class Task {
     }
   }
 
-  public async run(seed?: any, lastResult?: any): Promise<RunResult> {
-    try {
+  public async run(
+    seed?: any,
+    lastResult?: any,
+    options: Options = {},
+  ): Promise<RunResult> {
+    if (options.throwErrors) {
       const result = await this.action(seed, lastResult)
       return this.succeed(result)
-    } catch (e) {
-      return this.fail(e)
+    } else {
+      try {
+        const result = await this.action(seed, lastResult)
+        return this.succeed(result)
+      } catch (e) {
+        return this.fail(e)
+      }
     }
   }
 }

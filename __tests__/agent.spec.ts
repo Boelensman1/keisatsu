@@ -10,7 +10,7 @@ const createTestKeitatsu = () => {
 describe('The agent class', () => {
   it('Can be created', () => {
     class TestAgent extends Agent {}
-    const agent = new TestAgent(createTestKeitatsu())
+    const agent = new TestAgent(createTestKeitatsu(), {})
     expect(agent).toBeTruthy()
   })
 
@@ -22,7 +22,7 @@ describe('The agent class', () => {
       }
     }
 
-    const agent = new TestAgent(createTestKeitatsu())
+    const agent = new TestAgent(createTestKeitatsu(), {})
     agent.registerTask(TestTask)
 
     const result = await agent.runTask('TestTask')
@@ -38,7 +38,7 @@ describe('The agent class', () => {
       }
     }
 
-    const agent = new TestAgent(createTestKeitatsu())
+    const agent = new TestAgent(createTestKeitatsu(), {})
     agent.registerTask(TestTask)
 
     const result = await agent.runTasks(['TestTask', 'TestTask'])
@@ -63,7 +63,7 @@ describe('The agent class', () => {
       }
     }
 
-    const agent = new TestAgent(createTestKeitatsu())
+    const agent = new TestAgent(createTestKeitatsu(), {})
     agent.registerTask(TestTask)
     agent.registerTask(TestTask2)
 
@@ -96,7 +96,7 @@ describe('The agent class', () => {
       }
     }
 
-    const agent = new TestAgent(createTestKeitatsu())
+    const agent = new TestAgent(createTestKeitatsu(), {})
     agent.registerTask(Test1)
 
     const result = await agent.runTasks([
@@ -125,7 +125,7 @@ describe('The agent class', () => {
       }
     }
 
-    const agent = new TestAgent(createTestKeitatsu())
+    const agent = new TestAgent(createTestKeitatsu(), {})
     agent.registerTask(TestTask)
 
     agent.addTaskPlan('main', [

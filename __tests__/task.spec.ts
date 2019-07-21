@@ -7,7 +7,7 @@ const createTestKeitatsuAgent = (): { keisatsu: Keisatsu; agent: Agent } => {
   class TestAgent extends Agent {}
 
   const keisatsu = new TestKeisatsu()
-  return { keisatsu, agent: new TestAgent(keisatsu) }
+  return { keisatsu, agent: new TestAgent(keisatsu, {}) }
 }
 
 describe('The task class', () => {

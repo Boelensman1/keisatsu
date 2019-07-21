@@ -49,4 +49,46 @@ describe('The keisatsu class', () => {
     expect(result[0].success).toBe(true)
     expect(result[0].data).toBe('test2')
   })
+  it('Forwards errors', async () => {
+    class TestKeitsatu extends Keisatsu {}
+
+    const testKeitsatu = new TestKeitsatu()
+
+    class TestTask2 extends Task {
+      public action(_seed: number, _prevData: number) {
+        throw Error('error!')
+      }
+    }
+    const testAgent = createTestAgent(testKeitsatu)
+
+    testAgent.registerTask(TestTask2)
+    testAgent.addTaskPlan('test', ['TestTask2'])
+
+    const result = await testKeitsatu.getAgent('TestAgent').runTaskPlan('test')
+    expect(result[0].success).toBe(false)
+    expect(result[0].error).toBeTruthy()
+  })
+  it('Throws errors', async () => {
+    class TestKeitsatu extends Keisatsu {}
+
+    const testKeitsatu = new TestKeitsatu({ throwErrors: true })
+
+    class TestTask2 extends Task {
+      public action(_seed: number, _prevData: number) {
+        throw Error('error!')
+      }
+    }
+    const testAgent = createTestAgent(testKeitsatu)
+
+    testAgent.registerTask(TestTask2)
+    testAgent.addTaskPlan('test', ['TestTask2'])
+
+    try {
+      await testKeitsatu.getAgent('TestAgent').runTaskPlan('test')
+      // should never get here
+      expect(true).toBe(false)
+    } catch (e) {
+      expect(e).toBeTruthy()
+    }
+  })
 })
