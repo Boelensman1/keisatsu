@@ -36,6 +36,9 @@ export default abstract class Agent {
   constructor(private hq: Keisatsu, private options: Options) {}
 
   public get(property: string): any {
+    if (!this.hasOwnProperty(property)) {
+      throw Error(`No property with name "${name}" is set`)
+    }
     return this[property]
   }
 
@@ -52,12 +55,20 @@ export default abstract class Agent {
   }
 
   public runTaskPlan(name: string): Promise<RunResult> {
-    return this.runTasks(this.taskPlans[name])
+    const taskPlan = this.taskPlans[name]
+    if (!taskPlan) {
+      throw Error(`No taskPlan with name "${name}" is registered`)
+    }
+    return this.runTasks(taskPlan)
   }
 
   public runTask(task: taskPlanElement, lastResult?: any): Promise<RunResult> {
     if (typeof task === 'string' || task instanceof String) {
-      return this.tasks[task as string].run(undefined, lastResult, this.options)
+      const taskToRun = this.tasks[task as string]
+      if (!taskToRun) {
+        throw Error(`No task with name "${task}" is registered`)
+      }
+      return taskToRun.run(undefined, lastResult, this.options)
     }
     return this.tasks[task.name].run(task.seed, lastResult, this.options)
   }

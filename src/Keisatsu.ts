@@ -19,10 +19,17 @@ export default abstract class Keisatsu {
   }
 
   public getAgent(name: string): Agent {
-    return this.agents[name]
+    const agent = this.agents[name]
+    if (!agent) {
+      throw Error(`No agent with name "${name}" is registered`)
+    }
+    return agent
   }
 
   public get(property: string): any {
+    if (!this.hasOwnProperty(property)) {
+      throw Error(`No property with name "${name}" is set`)
+    }
     return this[property]
   }
 
