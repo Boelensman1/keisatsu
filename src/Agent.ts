@@ -42,6 +42,10 @@ export default abstract class Agent {
     return this[property]
   }
 
+  public has(property: string): boolean {
+    return this.hasOwnProperty(property)
+  }
+
   public set(property: string, value: any): void {
     this[property] = value
   }
